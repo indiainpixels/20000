@@ -57,7 +57,7 @@
   <script>
     let key = localStorage.getItem('myKey');
     if (!key) {
-      const myKey = 'key-' + parseInt(Math.random() * 1000000);
+      const myKey = 'key-' + parseInt(Math.random() * 10000000000);
       localStorage.setItem('myKey', myKey);
       key = myKey;
     }
@@ -80,7 +80,7 @@
       let username = document.getElementById('username').value;
       //const username = 'iashris';
       if (username) {
-        username = username.toLowerCase();
+        username = username.toLowerCase().replace(' ', '');
         const docRef = firebase.firestore().collection('usernames').doc(key);
         const file = await fetch('findme.json');
         const json = await file.json();
