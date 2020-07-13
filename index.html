@@ -77,9 +77,10 @@
       return i + 'th';
     }
     const findMe = async () => {
-      const username = document.getElementById('username').value;
+      let username = document.getElementById('username').value;
       //const username = 'iashris';
       if (username) {
+        username = username.toLowerCase();
         const docRef = firebase.firestore().collection('usernames').doc(key);
         const file = await fetch('findme.json');
         const json = await file.json();
