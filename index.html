@@ -55,155 +55,82 @@
   </script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <script>
-    const _0x1164 = [
-      'left',
-      'width',
-      'offset',
-      'center',
-      'firestore',
-      'getElementById',
-      'doc',
-      '#notPresent',
-      'display',
-      '\x20row\x20and\x20',
-      'top',
-      '#interface',
-      'username',
-      '-min.jpg',
-      'arrayUnion',
-      'scrollIntoView',
-      'OXfxn',
-      'getItem',
-      'usernames',
-      'click',
-      'attr',
-      'opacity',
-      '\x20column!',
-      'setItem',
-      'round',
-      'src',
-      'json',
-      '\x20page,\x20',
-      'none',
-      '#highlighter',
-      'css',
-      'myKey',
-      'set',
-      'collection',
-      'block',
-      'findme.json',
-      'log',
-      'height',
-      'You\x20are\x20on\x20the\x20',
-      '#resimg',
-      'FieldValue',
-      'smooth',
-      'value',
-    ];
-    (function (_0x1e9884, _0x1164b3) {
-      const _0x228169 = function (_0x352667) {
-        while (--_0x352667) {
-          _0x1e9884['push'](_0x1e9884['shift']());
-        }
-      };
-      _0x228169(++_0x1164b3);
-    })(_0x1164, 0xe4);
-    const _0x2281 = function (_0x1e9884, _0x1164b3) {
-      _0x1e9884 = _0x1e9884 - 0x0;
-      let _0x228169 = _0x1164[_0x1e9884];
-      return _0x228169;
-    };
-    let key = localStorage[_0x2281('0x4')](_0x2281('0x12'));
+    let key = localStorage.getItem('myKey');
     if (!key) {
-      const myKey = 'key-' + parseInt(Math['random']() * 0xf4240);
-      localStorage[_0x2281('0xa')]('myKey', myKey), (key = myKey);
+      const myKey = 'key-' + parseInt(Math.random() * 1000000);
+      localStorage.setItem('myKey', myKey);
+      key = myKey;
     }
-    function ord(_0x2a0274) {
-      var _0x539d49 = _0x2a0274 % 0xa,
-        _0x20ce54 = _0x2a0274 % 0x64;
-      if (_0x539d49 == 0x1 && _0x20ce54 != 0xb) return _0x2a0274 + 'st';
-      if (_0x539d49 == 0x2 && _0x20ce54 != 0xc) return _0x2a0274 + 'nd';
-      if (_0x539d49 == 0x3 && _0x20ce54 != 0xd) return _0x2a0274 + 'rd';
-      return _0x2a0274 + 'th';
+
+    function ord(i) {
+      var j = i % 10,
+        k = i % 100;
+      if (j == 1 && k != 11) {
+        return i + 'st';
+      }
+      if (j == 2 && k != 12) {
+        return i + 'nd';
+      }
+      if (j == 3 && k != 13) {
+        return i + 'rd';
+      }
+      return i + 'th';
     }
     const findMe = async () => {
-      const _0x5a47e4 = document[_0x2281('0x23')](_0x2281('0x2a'))[
-        _0x2281('0x1d')
-      ];
-      if (_0x5a47e4) {
-        if (_0x2281('0x3') === _0x2281('0x3')) {
-          const _0x55cd44 = firebase[_0x2281('0x22')]()
-              [_0x2281('0x14')](_0x2281('0x5'))
-              [_0x2281('0x24')](key),
-            _0x5ba748 = await fetch(_0x2281('0x16')),
-            _0x2d680a = await _0x5ba748[_0x2281('0xd')](),
-            _0x164367 = _0x2d680a[_0x5a47e4];
-          console[_0x2281('0x17')](_0x164367);
-          if (!_0x164367) {
-            $(_0x2281('0x25'))[_0x2281('0x11')](
-              _0x2281('0x26'),
-              _0x2281('0x15')
-            );
-            _0x55cd44[_0x2281('0x13')]({
-              items: firebase['firestore']['FieldValue'][_0x2281('0x1')]({
-                k: _0x5a47e4,
-                v: 'f',
-              }),
-            });
-            return;
-          }
-          const _0x3c94b6 = _0x164367[0x0],
-            _0x293345 = _0x164367[0x1];
-          let _0xb06dee = _0x164367[0x2];
-          (_0xb06dee = Math[_0x2281('0xb')](_0xb06dee)),
-            $(_0x2281('0x29'))[_0x2281('0x11')](
-              _0x2281('0x26'),
-              _0x2281('0xf')
-            ),
-            _0x55cd44[_0x2281('0x13')]({
-              items: firebase[_0x2281('0x22')][_0x2281('0x1b')]['arrayUnion']({
-                k: _0x5a47e4,
-                v: 't',
-              }),
+      const username = document.getElementById('username').value;
+      //const username = 'iashris';
+      if (username) {
+        const docRef = firebase.firestore().collection('usernames').doc(key);
+        const file = await fetch('findme.json');
+        const json = await file.json();
+        const result = json[username];
+        console.log(result);
+        if (!result) {
+          $('#notPresent').css('display', 'block');
+          docRef.set({
+            items: firebase.firestore.FieldValue.arrayUnion({
+              k: username,
+              v: 'f',
             }),
-            $('#resimg')[_0x2281('0x7')](
-              _0x2281('0xc'),
-              'mnti-' + _0x3c94b6 + _0x2281('0x0')
-            ),
-            $('#highlighter')
-              [_0x2281('0x11')](_0x2281('0x8'), 0x1)
-              ['css'](_0x2281('0x1e'), _0xb06dee * 0x32 + 'px')
-              [_0x2281('0x11')](_0x2281('0x28'), _0x293345 * 0x32 + 'px'),
-            $(_0x2281('0x10'))[_0x2281('0x6')]((_0xa3446c) => {
-              alert(
-                _0x2281('0x19') +
-                  ord(_0x3c94b6 + 0x2) +
-                  _0x2281('0xe') +
-                  ord(_0x293345 + 0x1) +
-                  _0x2281('0x27') +
-                  ord(_0xb06dee + 0x1) +
-                  _0x2281('0x9')
-              );
-            }),
-            setTimeout(() => {
-              const _0xb24856 = $(_0x2281('0x1a'))[_0x2281('0x1f')](),
-                _0x2f1358 = $(_0x2281('0x1a'))[_0x2281('0x18')](),
-                _0x34772d = $(_0x2281('0x10'))[_0x2281('0x20')]()['top'],
-                _0x22bca2 = $(_0x2281('0x10'))[_0x2281('0x20')]()[
-                  _0x2281('0x1e')
-                ];
-              console[_0x2281('0x17')](_0x34772d, _0x22bca2);
-              document[_0x2281('0x23')]('highlighter')[_0x2281('0x2')]({
-                behavior: _0x2281('0x1c'),
-                block: _0x2281('0x21'),
-                inline: _0x2281('0x21'),
-              });
-            }, 0x3e8);
-        } else {
-          function _0x295605() {
-            return i + 'rd';
-          }
+          });
+          return;
         }
+        const pageid = result[0];
+        const rowid = result[1];
+        let colid = result[2];
+        colid = Math.round(colid);
+        $('#interface').css('display', 'none');
+        docRef.set({
+          items: firebase.firestore.FieldValue.arrayUnion({
+            k: username,
+            v: 't',
+          }),
+        });
+        $('#resimg').attr('src', `mnti-${pageid}-min.jpg`);
+        $('#highlighter')
+          .css('opacity', 1)
+          .css('left', `${colid * 50}px`)
+          .css('top', `${rowid * 50}px`);
+
+        $('#highlighter').click((e) => {
+          alert(
+            `You are on the ${ord(pageid + 2)} page, ${ord(
+              rowid + 1
+            )} row and ${ord(colid + 1)} column!`
+          );
+        });
+        setTimeout(() => {
+          const w = $('#resimg').width();
+          const h = $('#resimg').height();
+          const scrollTop = $('#highlighter').offset().top;
+          const scrollLeft = $('#highlighter').offset().left;
+          console.log(scrollTop, scrollLeft);
+          document.getElementById('highlighter').scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'center',
+          });
+        }, 1000);
       }
     };
   </script>
