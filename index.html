@@ -106,7 +106,7 @@
           .firestore()
           .collection('usernames')
           .add({ key, username, result: 'true' });
-        $('#resimg').attr('src', `mnti-${pageid}.jpg`);
+        $('#resimg').attr('src', `mnti-${pageid}-min.jpg`);
         $('#highlighter')
           .css('opacity', 1)
           .css('left', `${colid * 50}px`)
