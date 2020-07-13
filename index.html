@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>20,000</title>
+  </head>
+  <body>
+    <div id="interface">
+      <div>What's your Instagram ID?</div>
+      <div><input id="username" /></div>
+      <div><button onClick="findMe();">Find Me</button></div>
+      <div id="notPresent">
+        <p>
+          Hmm... Your ID doesn't seem to be on the list. Maybe you changed your
+          username or forgot to follow us?
+        </p>
+        <p>
+          Make sure you have followed
+          <a href="https://instagram.com/india.in.pixels">India in Pixels</a> to
+          be part of the 30K mosaic
+        </p>
+      </div>
+    </div>
+    <div id="results">
+      <!-- <h2 id="exact">You are on</h2> -->
+      <img id="resimg" />
+    </div>
+    <div id="highlighter"></div>
+  </body>
+  <!-- jQuery JS 3.1.0 -->
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-app.js"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-analytics.js"></script>
+
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: 'AIzaSyBAt3OKDen_K3Pv7rPsXtgr9-OEmTat4fs',
+      authDomain: 'findme-472c5.firebaseapp.com',
+      databaseURL: 'https://findme-472c5.firebaseio.com',
+      projectId: 'findme-472c5',
+      storageBucket: 'findme-472c5.appspot.com',
+      messagingSenderId: '1070308252775',
+      appId: '1:1070308252775:web:7e447cab33792d96b2c8c2',
+      measurementId: 'G-4NGB6M0FEF',
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script>
+    let key = localStorage.getItem('myKey');
+    if (!key) {
+      const myKey = 'key-' + parseInt(Math.random() * 1000000);
+      localStorage.setItem('myKey', myKey);
+      key = myKey;
+    }
+
+    function ord(i) {
+      var j = i % 10,
+        k = i % 100;
+      if (j == 1 && k != 11) {
+        return i + 'st';
+      }
+      if (j == 2 && k != 12) {
+        return i + 'nd';
+      }
+      if (j == 3 && k != 13) {
+        return i + 'rd';
+      }
+      return i + 'th';
+    }
+    const findMe = async () => {
+      const username = document.getElementById('username').value;
+      //const username = 'iashris';
+      if (username) {
+        const file = await fetch('findme.json');
+        const json = await file.json();
+        const result = json[username];
+        console.log(result);
+        if (!result) {
+          $('#notPresent').css('display', 'block');
+          firebase
+            .firestore()
+            .collection('usernames')
+            .add({ key, username, result: 'false' });
+          return;
+        }
+        const pageid = result[0];
+        const rowid = result[1];
+        let colid = result[2];
+        colid = Math.round(colid);
+        $('#interface').css('display', 'none');
+        // $('#exact').html(
+        //   `You are on the ${ord(pageid + 2)} page, ${ord(
+        //     rowid + 1
+        //   )} row and ${ord(colid + 1)} column!`
+        // );
+        firebase
+          .firestore()
+          .collection('usernames')
+          .add({ key, username, result: 'true' });
+        $('#resimg').attr('src', `mnti-${pageid}.jpg`);
+        $('#highlighter')
+          .css('opacity', 1)
+          .css('left', `${colid * 50}px`)
+          .css('top', `${rowid * 50}px`);
+
+        $('#highlighter').click((e) => {
+          alert(
+            `You are on the ${ord(pageid + 2)} page, ${ord(
+              rowid + 1
+            )} row and ${ord(colid + 1)} column!`
+          );
+        });
+        setTimeout(() => {
+          const w = $('#resimg').width();
+          const h = $('#resimg').height();
+          const scrollTop = $('#highlighter').offset().top;
+          const scrollLeft = $('#highlighter').offset().left;
+          console.log(scrollTop, scrollLeft);
+          document.getElementById('highlighter').scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'center',
+          });
+        }, 1000);
+      }
+    };
+
+    //findMe();
+  </script>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    #notPresent {
+      display: none;
+      font-style: italic;
+      padding: 15px;
+      text-align: center;
+    }
+    a {
+      text-decoration: none;
+      font-weight: bold;
+      color: purple;
+    }
+    #interface {
+      font-family: Arial, Helvetica, sans-serif;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      /* display: none; */
+    }
+    input {
+      border: 0;
+      outline: 0;
+      border-bottom: 1px solid black;
+      margin: 20px 0;
+      text-align: center;
+      color: #ff7722;
+      font-size: 2em;
+    }
+    #highlighter {
+      width: 46px;
+      height: 46px;
+      border: 2px solid gold;
+      position: absolute;
+      top: 0;
+      box-shadow: 0 0 20px gold;
+      opacity: 0;
+    }
+    #highlighter:hover {
+      background: rgba(250, 255, 0, 0.1);
+    }
+  </style>
+</html>
